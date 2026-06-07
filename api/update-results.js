@@ -22,8 +22,9 @@ export default async function handler(req, res) {
   const querySecret = req.query.secret
 
   const authorized =
-    authHeader === `Bearer ${process.env.CRON_SECRET}` ||
-    querySecret === process.env.CRON_SECRET
+  authHeader === `Bearer ${process.env.CRON_SECRET}` ||
+  querySecret === process.env.CRON_SECRET ||
+  req.headers['user-agent']?.includes('vercel-cron')
 
   if (!authorized) {
     return res.status(401).json({
